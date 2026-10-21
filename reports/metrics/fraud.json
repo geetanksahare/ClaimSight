@@ -1,0 +1,27 @@
+{
+  "roc_auc": 1.0,
+  "pr_auc": 1.0,
+  "f1": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "brier": 0.0,
+  "threshold_used": 0.814,
+  "threshold_note": "custom",
+  "base_rate": 0.0958,
+  "precision_at_top_k": 0.9583,
+  "recall_at_top_k": 1.0,
+  "confusion_matrix": [
+    [
+      217,
+      0
+    ],
+    [
+      0,
+      23
+    ]
+  ],
+  "n_samples": 240,
+  "positive_base_rate": 0.0958,
+  "pr_auc_vs_base_rate_ratio": 10.43,
+  "best_model": "logistic_regression"
+}

@@ -54,6 +54,8 @@ data/processed/*
 
 # Models: ignore model weights/joblib, keep metadata and latest.json
 models/*/*/*.joblib
+models/*_test*/
+models/*_mismatch*/
 
 # Environment & credentials
 .env

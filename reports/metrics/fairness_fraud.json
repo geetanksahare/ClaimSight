@@ -1,0 +1,73 @@
+{
+  "task": "classification",
+  "module": "fraud",
+  "relative_gap_threshold": 0.2,
+  "columns": {
+    "inpatient_share_tercile": {
+      "overall_metric": 0.0958,
+      "primary_metric": "selection_rate",
+      "max_min_gap": 0.0758,
+      "relative_gap": 0.791,
+      "disparity_flag": true,
+      "groups": {
+        "high": {
+          "count": 79.0,
+          "low_n": false,
+          "selection_rate": 0.0886,
+          "tpr": 1.0,
+          "fpr": 0.0,
+          "precision": 1.0
+        },
+        "low": {
+          "count": 81.0,
+          "low_n": false,
+          "selection_rate": 0.0617,
+          "tpr": 1.0,
+          "fpr": 0.0,
+          "precision": 1.0
+        },
+        "medium": {
+          "count": 80.0,
+          "low_n": false,
+          "selection_rate": 0.1375,
+          "tpr": 1.0,
+          "fpr": 0.0,
+          "precision": 1.0
+        }
+      }
+    },
+    "provider_size_tercile": {
+      "overall_metric": 0.0958,
+      "primary_metric": "selection_rate",
+      "max_min_gap": 0.2875,
+      "relative_gap": 3.0,
+      "disparity_flag": true,
+      "groups": {
+        "large": {
+          "count": 80.0,
+          "low_n": false,
+          "selection_rate": 0.2875,
+          "tpr": 1.0,
+          "fpr": 0.0,
+          "precision": 1.0
+        },
+        "medium": {
+          "count": 80.0,
+          "low_n": false,
+          "selection_rate": 0.0,
+          "tpr": 0.0,
+          "fpr": 0.0,
+          "precision": 0.0
+        },
+        "small": {
+          "count": 80.0,
+          "low_n": false,
+          "selection_rate": 0.0,
+          "tpr": 0.0,
+          "fpr": 0.0,
+          "precision": 0.0
+        }
+      }
+    }
+  }
+}

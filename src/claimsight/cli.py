@@ -44,10 +44,20 @@ def train_member_command(
 
 
 @app.command("train-fraud")
-def train_fraud_command() -> None:
+def train_fraud_command(
+    trials: int | None = typer.Option(None, help="Optuna hyperparameter tuning trials"),
+) -> None:
     """Train provider anomaly and fraud risk scoring pipeline."""
     configure_logging()
+    from claimsight.models.train_fraud import train_fraud_pipeline
+
     typer.echo("Executing train-fraud command...")
+    results = train_fraud_pipeline(trials=trials)
+    metrics = results["test_metrics"]
+    typer.echo(
+        f"Finished train-fraud: PR-AUC = {metrics['pr_auc']:.4f} (Base rate: {metrics['positive_base_rate']:.4f}), "
+        f"ROC-AUC = {metrics['roc_auc']:.4f}, F1 = {metrics['f1']:.4f}"
+    )
 
 
 @app.command("generate-cards")

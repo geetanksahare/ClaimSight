@@ -17,6 +17,7 @@ class PathSettings(BaseModel):
     raw_dir: Path
     interim_dir: Path
     processed_dir: Path
+    demo_dir: Path = Field(default_factory=lambda: Path("data/demo"))
     models_dir: Path
     reports_dir: Path
 

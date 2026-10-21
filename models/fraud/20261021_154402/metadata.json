@@ -1,0 +1,73 @@
+{
+  "module": "fraud",
+  "version": "20261021_154402",
+  "saved_at_utc": "2026-10-21T15:44:02.554057+00:00",
+  "git_commit": "482b8a5de7c79bb1cc13af9878295e2bf41116d6",
+  "sklearn_version": "1.7.2",
+  "features": [
+    "n_claims",
+    "n_inpatient",
+    "n_outpatient",
+    "inpatient_share",
+    "n_unique_beneficiaries",
+    "claims_per_beneficiary",
+    "reimb_sum",
+    "reimb_mean",
+    "reimb_median",
+    "reimb_max",
+    "reimb_std",
+    "deductible_mean",
+    "n_unique_attending",
+    "n_unique_operating",
+    "attending_missing_share",
+    "operating_missing_share",
+    "top_attending_claim_share",
+    "mean_los",
+    "mean_claim_duration",
+    "mean_n_diagnosis_codes",
+    "mean_n_procedure_codes",
+    "n_unique_diag_codes",
+    "bene_mean_age",
+    "bene_chronic_mean",
+    "bene_renal_share",
+    "bene_mean_partA_months",
+    "share_claims_same_day_multiple"
+  ],
+  "training_rows": 960,
+  "seed": 42,
+  "metrics": {
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "brier": 0.0,
+    "threshold_used": 0.814,
+    "threshold_note": "custom",
+    "base_rate": 0.0958,
+    "precision_at_top_k": 0.9583,
+    "recall_at_top_k": 1.0,
+    "confusion_matrix": [
+      [
+        217,
+        0
+      ],
+      [
+        0,
+        23
+      ]
+    ],
+    "n_samples": 240,
+    "positive_base_rate": 0.0958,
+    "pr_auc_vs_base_rate_ratio": 10.43,
+    "best_model": "logistic_regression"
+  },
+  "optimal_threshold": 0.8140190495485499,
+  "iforest_min": -0.1523404177333711,
+  "iforest_max": 0.14605325735467478,
+  "risk_weights": {
+    "supervised": 0.7,
+    "anomaly": 0.3
+  },
+  "split_strategy": "StratifiedKFold (80/20) on is_fraud"
+}
