@@ -1,6 +1,5 @@
 import pytest
 
-from claimsight.config import get_settings
 from claimsight.models.train_cost import train_cost_pipeline
 from claimsight.models.train_fraud import train_fraud_pipeline
 from claimsight.models.train_member import train_member_pipeline
