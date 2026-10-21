@@ -1,0 +1,7 @@
+{
+  "module": "cost_test_mismatch",
+  "version": "v_mismatch",
+  "saved_at_utc": "2026-10-21T15:29:47.881506+00:00",
+  "git_commit": "81a39def9788dd1d3a2ed2b6daecc5cf9fdfbb5a",
+  "sklearn_version": "0.19.1"
+}

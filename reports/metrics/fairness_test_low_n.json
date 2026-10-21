@@ -1,0 +1,32 @@
+{
+  "task": "regression",
+  "module": "test_low_n",
+  "relative_gap_threshold": 0.2,
+  "columns": {
+    "group": {
+      "overall_metric": 60.0,
+      "primary_metric": "mae",
+      "max_min_gap": 0.0,
+      "relative_gap": 0.0,
+      "disparity_flag": false,
+      "groups": {
+        "A": {
+          "count": 40.0,
+          "low_n": false,
+          "rmse": 0.0,
+          "mae": 0.0,
+          "mean_signed_error": 0.0,
+          "mean_prediction": 100.0
+        },
+        "B": {
+          "count": 10.0,
+          "low_n": true,
+          "rmse": 300.0,
+          "mae": 300.0,
+          "mean_signed_error": 300.0,
+          "mean_prediction": 500.0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "module": "cost",
+  "version": "20261021_152232",
+  "saved_at_utc": "2026-10-21T15:22:32.996740+00:00",
+  "git_commit": "81a39def9788dd1d3a2ed2b6daecc5cf9fdfbb5a",
+  "sklearn_version": "1.7.2",
+  "model_type": "XGBRegressor",
+  "features": [
+    "age",
+    "bmi",
+    "children",
+    "sex",
+    "smoker",
+    "region",
+    "age_band",
+    "bmi_category",
+    "is_obese",
+    "smoker_flag",
+    "sex_flag",
+    "has_children",
+    "smoker_x_obese",
+    "smoker_x_age",
+    "bmi_x_smoker",
+    "family_size_bucket"
+  ],
+  "training_rows": 935,
+  "seed": 42,
+  "conformal_q": 0.5027558087463877,
+  "alpha": 0.1,
+  "metrics": {
+    "rmse": 3362.4966,
+    "mae": 1528.015,
+    "r2": 0.922,
+    "median_ae": 728.8412,
+    "mape": 15.9306,
+    "n_samples": 201,
+    "segments": {
+      "smoker": {
+        "no": {
+          "count": 160,
+          "rmse": 3221.6548,
+          "mae": 1397.9685,
+          "r2": 0.5695,
+          "mape": 18.4634
+        },
+        "yes": {
+          "count": 41,
+          "rmse": 3863.3156,
+          "mae": 2035.5132,
+          "r2": 0.8694,
+          "mape": 6.0469
+        }
+      },
+      "sex": {
+        "female": {
+          "count": 104,
+          "rmse": 3235.7834,
+          "mae": 1400.1544,
+          "r2": 0.8924,
+          "mape": 16.8195
+        },
+        "male": {
+          "count": 97,
+          "rmse": 3493.2519,
+          "mae": 1665.1026,
+          "r2": 0.9345,
+          "mape": 14.9776
+        }
+      },
+      "region": {
+        "southwest": {
+          "count": 53,
+          "rmse": 3826.3241,
+          "mae": 1698.4972,
+          "r2": 0.9043,
+          "mape": 14.12
+        },
+        "southeast": {
+          "count": 47,
+          "rmse": 2698.8919,
+          "mae": 1402.7899,
+          "r2": 0.9541,
+          "mape": 15.2809
+        },
+        "northeast": {
+          "count": 47,
+          "rmse": 2542.5515,
+          "mae": 1279.2096,
+          "r2": 0.9556,
+          "mape": 15.636
+        },
+        "northwest": {
+          "count": 54,
+          "rmse": 3968.4857,
+          "mae": 1686.2348,
+          "r2": 0.8707,
+          "mape": 18.5297
+        }
+      }
+    },
+    "conformal_q": 0.5028,
+    "conformal_coverage": 0.9254,
+    "target_coverage": 0.9,
+    "best_model": "xgboost"
+  },
+  "numeric_ranges": {
+    "age": {
+      "min": 18.0,
+      "max": 64.0
+    },
+    "bmi": {
+      "min": 15.96,
+      "max": 53.13
+    },
+    "children": {
+      "min": 0.0,
+      "max": 5.0
+    }
+  },
+  "split_strategy": "Stratified on smoker, 70/15/15 (train/calib/test)",
+  "unaware_variant_rmse": 3311.7648,
+  "unaware_variant_mae": 1562.5351
+}

@@ -6,6 +6,10 @@ from typing import Any
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
 
+# Ensure MLflow 3.x supports local file store and silence hints
+os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
+os.environ.setdefault("MLFLOW_DISABLE_AGENT_HINT", "1")
+
 
 class PathSettings(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -92,7 +96,9 @@ class Settings(BaseModel):
 def find_repo_root() -> Path:
     current = Path(__file__).resolve().parent
     for candidate in [current, *current.parents]:
-        if (candidate / "configs" / "config.yaml").exists() or (candidate / "pyproject.toml").exists():
+        if (candidate / "configs" / "config.yaml").exists() or (
+            candidate / "pyproject.toml"
+        ).exists():
             return candidate
     return Path.cwd()
 

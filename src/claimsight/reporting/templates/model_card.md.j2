@@ -1,0 +1,59 @@
+# Model Card: {{ module_name }}
+
+Built on public/synthetic data. Not for real pricing, underwriting or claims decisions.
+
+## 1. Overview
+- **Model Identifier:** `{{ module }}`
+- **Version:** `{{ version }}`
+- **Model Type:** `{{ model_type }}`
+- **Date Generated:** `{{ generated_date }}`
+- **Git Commit:** `{{ git_commit }}`
+- **Scikit-Learn Version:** `{{ sklearn_version }}`
+
+## 2. Intended Use & Scope
+- **Intended Use:** Benchmark predictive modeling, demographic disparity auditing, and explainability exploration on public synthetic healthcare insurance claims data.
+- **Out-of-Scope Use:** Not for clinical diagnosis, commercial insurance underwriting, individual pricing, or automated claims denial.
+
+## 3. Training Data
+- **Dataset Source:** {{ data_source }}
+- **Row Count:** {{ training_rows }} training samples
+- **Licence:** Public Open Access / Synthetic Public Use File
+- **Data Statement:** Built on public/synthetic data. Not for real pricing, underwriting or claims decisions.
+
+## 4. Features & Split Strategy
+- **Feature Set:** {{ features | join(", ") }}
+- **Split Strategy:** {{ split_strategy }}
+- **Global Random Seed:** {{ seed }}
+
+## 5. Quantitative Evaluation
+All metrics read directly from code evaluation reports (`reports/metrics/{{ module }}.json`).
+
+| Metric | Score |
+|---|---|
+{% for k, v in metrics.items() %}
+{% if k not in ["segments", "confusion_matrix"] %}
+| {{ k }} | {{ v }} |
+{% endif %}
+{% endfor %}
+
+{% if conformal_q %}
+### Conformal Prediction Intervals
+- **Log Nonconformity Quantile (q):** {{ conformal_q }}
+- **Empirical Coverage on Test Set:** {{ interval_coverage }}% (target: 90%)
+{% endif %}
+
+## 6. Fairness & Subgroup Parity
+- **Audit Tool:** Fairlearn `MetricFrame`
+- **Summary:**
+{% for col, info in fairness_summary.items() %}
+- `{{ col }}`: Disparity gap = {{ info.max_min_gap }} (Relative gap = {{ (info.relative_gap * 100) | round(1) }}%, Status: {{ "FLAGGED" if info.disparity_flag else "Passed" }})
+{% endfor %}
+
+## 7. Known Limitations & Ethical Considerations
+The cost dataset is a small US sample with four regions; SynPUF is synthetic Medicare data (older population, altered correlations); fraud labels are provider-level with about 9 percent positives; none of these datasets represent any specific country's market or any real insurer; associations are not causal.
+
+## 8. Reproducibility
+To reproduce this model training run from scratch:
+```bash
+make {{ train_command }}
+```

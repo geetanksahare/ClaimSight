@@ -1,0 +1,32 @@
+{
+  "task": "regression",
+  "module": "test_mod",
+  "relative_gap_threshold": 0.2,
+  "columns": {
+    "sex": {
+      "overall_metric": 30.0,
+      "primary_metric": "mae",
+      "max_min_gap": 40.0,
+      "relative_gap": 1.3333,
+      "disparity_flag": true,
+      "groups": {
+        "female": {
+          "count": 35.0,
+          "low_n": false,
+          "rmse": 50.0,
+          "mae": 50.0,
+          "mean_signed_error": 50.0,
+          "mean_prediction": 250.0
+        },
+        "male": {
+          "count": 35.0,
+          "low_n": false,
+          "rmse": 10.0,
+          "mae": 10.0,
+          "mean_signed_error": 10.0,
+          "mean_prediction": 110.0
+        }
+      }
+    }
+  }
+}

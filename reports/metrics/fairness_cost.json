@@ -1,0 +1,114 @@
+{
+  "task": "regression",
+  "module": "cost",
+  "relative_gap_threshold": 0.2,
+  "columns": {
+    "sex": {
+      "overall_metric": 1514.3828,
+      "primary_metric": "mae",
+      "max_min_gap": 285.3843,
+      "relative_gap": 0.1884,
+      "disparity_flag": false,
+      "groups": {
+        "female": {
+          "count": 104.0,
+          "low_n": false,
+          "rmse": 3229.7255,
+          "mae": 1376.66,
+          "mean_signed_error": 118.6507,
+          "mean_prediction": 10789.248
+        },
+        "male": {
+          "count": 97.0,
+          "low_n": false,
+          "rmse": 3495.9433,
+          "mae": 1662.0443,
+          "mean_signed_error": -426.8914,
+          "mean_prediction": 14528.9023
+        }
+      }
+    },
+    "region": {
+      "overall_metric": 1514.3828,
+      "primary_metric": "mae",
+      "max_min_gap": 389.2052,
+      "relative_gap": 0.257,
+      "disparity_flag": true,
+      "groups": {
+        "northeast": {
+          "count": 47.0,
+          "low_n": false,
+          "rmse": 2533.5429,
+          "mae": 1300.5717,
+          "mean_signed_error": 455.7061,
+          "mean_prediction": 13732.7529
+        },
+        "northwest": {
+          "count": 54.0,
+          "low_n": false,
+          "rmse": 4001.5461,
+          "mae": 1689.7769,
+          "mean_signed_error": -258.5177,
+          "mean_prediction": 11187.792
+        },
+        "southeast": {
+          "count": 47.0,
+          "low_n": false,
+          "rmse": 2670.1092,
+          "mae": 1379.0975,
+          "mean_signed_error": -107.1739,
+          "mean_prediction": 13382.3447
+        },
+        "southwest": {
+          "count": 53.0,
+          "low_n": false,
+          "rmse": 3808.8651,
+          "mae": 1645.2554,
+          "mean_signed_error": -594.1484,
+          "mean_prediction": 12317.6367
+        }
+      }
+    },
+    "age_band": {
+      "overall_metric": 1514.3828,
+      "primary_metric": "mae",
+      "max_min_gap": 1371.3164,
+      "relative_gap": 0.9055,
+      "disparity_flag": true,
+      "groups": {
+        "18-29": {
+          "count": 59.0,
+          "low_n": false,
+          "rmse": 2274.8409,
+          "mae": 1253.0717,
+          "mean_signed_error": 219.2959,
+          "mean_prediction": 7147.1499
+        },
+        "30-39": {
+          "count": 40.0,
+          "low_n": false,
+          "rmse": 2393.4781,
+          "mae": 1136.8824,
+          "mean_signed_error": 249.3637,
+          "mean_prediction": 12719.9346
+        },
+        "40-49": {
+          "count": 44.0,
+          "low_n": false,
+          "rmse": 5627.5947,
+          "mae": 2508.1988,
+          "mean_signed_error": -1532.9888,
+          "mean_prediction": 13083.9443
+        },
+        "50-64": {
+          "count": 58.0,
+          "low_n": false,
+          "rmse": 2429.678,
+          "mae": 1286.6149,
+          "mean_signed_error": 266.719,
+          "mean_prediction": 17676.0742
+        }
+      }
+    }
+  }
+}
