@@ -1,0 +1,45 @@
+seed: 42
+
+paths:
+  raw_dir: "data/raw"
+  interim_dir: "data/interim"
+  processed_dir: "data/processed"
+  models_dir: "models"
+  reports_dir: "reports"
+
+cost:
+  test_size: 0.15
+  calib_size: 0.15
+  cv_folds: 5
+  optuna_trials: 50
+  interval_alpha: 0.10
+  bmi_bins: [0, 18.5, 25, 30, 100]
+  bmi_labels: ["underweight", "normal", "overweight", "obese"]
+  age_bins: [17, 29, 39, 49, 64]
+  age_labels: ["18-29", "30-39", "40-49", "50-64"]
+
+member:
+  high_cost_quantile: 0.90
+  tier_quantiles: [0.50, 0.80, 0.95]
+  tweedie_power: 1.5
+  cv_folds: 5
+  optuna_trials: 40
+
+fraud:
+  test_size: 0.20
+  cv_folds: 5
+  optuna_trials: 40
+  threshold_metric: "f1"
+  iforest_contamination: 0.09
+  risk_weights:
+    supervised: 0.7
+    anomaly: 0.3
+
+fairness:
+  relative_gap_threshold: 0.20
+  sensitive_cost: ["sex", "region", "age_band"]
+  sensitive_member: ["sex", "race", "age_band"]
+
+api:
+  max_batch_rows: 50000
+  cors_origins: ["*"]
