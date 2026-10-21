@@ -8,10 +8,13 @@ from claimsight.models.train_member import train_member_pipeline
 
 @pytest.fixture
 def isolated_dirs(tmp_path, monkeypatch):
-    cfg = get_settings()
-    isolated_cfg = cfg.model_copy(
+    import claimsight.config as cfg_mod
+
+    cfg_mod.get_settings.cache_clear()
+    orig_cfg = cfg_mod.load_settings()
+    isolated_cfg = orig_cfg.model_copy(
         update={
-            "paths": cfg.paths.model_copy(
+            "paths": orig_cfg.paths.model_copy(
                 update={
                     "models_dir": tmp_path / "models",
                     "reports_dir": tmp_path / "reports",
@@ -19,11 +22,18 @@ def isolated_dirs(tmp_path, monkeypatch):
             )
         }
     )
-    monkeypatch.setattr("claimsight.config.get_settings", lambda: isolated_cfg)
-    monkeypatch.setattr("claimsight.models.registry.get_settings", lambda: isolated_cfg)
-    monkeypatch.setattr("claimsight.models.train_cost.get_settings", lambda: isolated_cfg)
-    monkeypatch.setattr("claimsight.models.train_member.get_settings", lambda: isolated_cfg)
-    monkeypatch.setattr("claimsight.models.train_fraud.get_settings", lambda: isolated_cfg)
+    monkeypatch.setattr(cfg_mod, "get_settings", lambda: isolated_cfg)
+    for mod in [
+        "claimsight.models.train_cost",
+        "claimsight.models.train_member",
+        "claimsight.models.train_fraud",
+        "claimsight.models.registry",
+        "claimsight.reporting.model_card",
+        "claimsight.explain.explain_prediction",
+        "claimsight.evaluation.fairness_audit",
+    ]:
+        monkeypatch.setattr(f"{mod}.get_settings", lambda: isolated_cfg)
+
     return isolated_cfg
 
 
