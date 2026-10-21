@@ -47,7 +47,6 @@ def test_one_hot_aggregation_preserves_total():
     # Also compute raw unaggregated SHAP on transformed vector
     from claimsight.config import get_settings
     from claimsight.features.build_features import build_features
-    from claimsight.features.cost_features import split_xy
 
     cfg = get_settings()
     feat = build_features("cost", pd.DataFrame([sample]), cfg)

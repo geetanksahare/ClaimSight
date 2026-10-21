@@ -27,10 +27,20 @@ def train_cost_command(
 
 
 @app.command("train-member")
-def train_member_command() -> None:
+def train_member_command(
+    trials: int | None = typer.Option(None, help="Optuna hyperparameter tuning trials"),
+) -> None:
     """Train member risk regression and classification pipeline."""
     configure_logging()
+    from claimsight.models.train_member import train_member_pipeline
+
     typer.echo("Executing train-member command...")
+    results = train_member_pipeline(trials=trials)
+    metrics = results["metrics"]
+    typer.echo(
+        f"Finished train-member: PR-AUC (High Cost) = {metrics['pr_auc']:.4f}, "
+        f"Expected Cost Test R2 = {metrics['test_r2']:.4f}, RMSE = ${metrics['test_rmse']:,.2f}"
+    )
 
 
 @app.command("train-fraud")

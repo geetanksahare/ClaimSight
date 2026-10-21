@@ -1,0 +1,52 @@
+{
+  "regression": {
+    "rmse": 2502.8334,
+    "mae": 1171.4039,
+    "r2": 0.0409,
+    "median_ae": 675.8351,
+    "mape": 5422.8651,
+    "n_samples": 780
+  },
+  "classification": {
+    "roc_auc": 0.6744,
+    "pr_auc": 0.1918,
+    "f1": 0.023,
+    "precision": 0.3333,
+    "recall": 0.0119,
+    "brier": 0.0934,
+    "threshold_used": 0.5,
+    "threshold_note": "custom",
+    "base_rate": 0.1077,
+    "precision_at_top_k": 0.2179,
+    "recall_at_top_k": 0.2024,
+    "confusion_matrix": [
+      [
+        694,
+        2
+      ],
+      [
+        83,
+        1
+      ]
+    ],
+    "n_samples": 780
+  },
+  "high_cost_threshold": 2790.34,
+  "tier_cutoffs": [
+    1020.84,
+    1480.79,
+    2350.11
+  ],
+  "tier_quantiles": [
+    0.5,
+    0.8,
+    0.95
+  ],
+  "n_train": 3148,
+  "n_test": 780,
+  "test_r2": 0.0409,
+  "test_rmse": 2502.8334,
+  "pr_auc": 0.1918,
+  "roc_auc": 0.6744,
+  "f1": 0.023
+}

@@ -28,6 +28,9 @@ def _get_cached_model_bundle(module: str) -> tuple[Any, dict[str, Any]]:
 
 def _extract_components(model: Any) -> tuple[Any, Any]:
     """Extract fitted ColumnTransformer preprocessor and inner tree estimator."""
+    if isinstance(model, dict):
+        model = model.get("classifier", model.get("regressor"))
+
     if isinstance(model, TransformedTargetRegressor):
         inner_pipe = model.regressor_
         preprocessor = inner_pipe.named_steps["preprocessor"]
@@ -65,15 +68,23 @@ def explain_prediction(
     else:
         input_df = inputs.copy()
 
-    features_df = build_features(module, input_df, cfg)
     if module == "cost":
+        features_df = build_features(module, input_df, cfg)
         X, _ = (
             split_cost_xy(features_df) if "charges" in features_df.columns else (features_df, None)
         )
-    elif "is_fraud" in features_df.columns:
-        X = features_df.drop(columns=["is_fraud"])
+    elif module == "member":
+        if "age_at_year_end" in input_df.columns:
+            drop_cols = [
+                c for c in ["member_id", "base_year", "next_year_cost"] if c in input_df.columns
+            ]
+            X = input_df.drop(columns=drop_cols)
+        else:
+            X = build_features(module, input_df, cfg)
+    elif "is_fraud" in input_df.columns:
+        X = input_df.drop(columns=["is_fraud"])
     else:
-        X = features_df
+        X = input_df
 
     preprocessor, inner_model = _extract_components(model)
     if preprocessor is not None:
@@ -83,17 +94,24 @@ def explain_prediction(
         X_transformed = X.to_numpy()
         feat_names = list(X.columns)
 
-    # Initialize SHAP explainer
-    explainer = shap.TreeExplainer(inner_model)
-    shap_out = explainer.shap_values(X_transformed)
+    # Initialize SHAP explainer (TreeExplainer for tree models, LinearExplainer for linear models)
+    try:
+        explainer = shap.TreeExplainer(inner_model)
+        shap_out = explainer.shap_values(X_transformed)
+        expected_val = explainer.expected_value
+    except Exception:
+        explainer = shap.LinearExplainer(inner_model, X_transformed)
+        shap_out = explainer.shap_values(X_transformed)
+        expected_val = explainer.expected_value
 
     if isinstance(shap_out, list):
-        # Multiclass or binary list: choose class 1
         shap_row = shap_out[1][0] if len(shap_out) > 1 else shap_out[0][0]
-    elif shap_out.ndim == 3:
+    elif hasattr(shap_out, "ndim") and shap_out.ndim == 3:
         shap_row = shap_out[0, :, 1]
-    else:
+    elif hasattr(shap_out, "ndim") and shap_out.ndim == 2:
         shap_row = shap_out[0]
+    else:
+        shap_row = np.asarray(shap_out).flatten()
 
     expected_val = explainer.expected_value
     if isinstance(expected_val, (list, np.ndarray)):
