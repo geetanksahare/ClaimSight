@@ -137,6 +137,8 @@ def explain_prediction(
     contributions = []
     for f_name, s_val in grouped_shap.items():
         val = X[f_name].iloc[0] if f_name in X.columns else None
+        if hasattr(val, "item"):
+            val = val.item()
         direction = "increases" if s_val >= 0 else "decreases"
         effect_pct = float((np.exp(s_val) - 1.0) * 100.0) if module == "cost" else None
         narrative_sentence = to_text(f_name, val, s_val, effect_pct=effect_pct, module=module)

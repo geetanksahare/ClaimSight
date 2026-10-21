@@ -3,7 +3,6 @@ from pathlib import Path
 import typer
 
 from claimsight.logging_config import configure_logging, get_logger
-from claimsight.reporting.model_card import generate_model_card
 
 app = typer.Typer(help="ClaimSight command-line interface for models, cards, and evaluation.")
 logger = get_logger(__name__)
@@ -60,19 +59,39 @@ def train_fraud_command(
     )
 
 
-@app.command("generate-cards")
-def generate_cards_command(
-    module: str = typer.Option("all", help="Module name (cost, member, fraud, or all)"),
+@app.command("load-and-clean")
+def load_and_clean_command(
+    dataset: str = typer.Option("all", help="Dataset to clean (cost, synpuf, fraud, or all)"),
 ) -> None:
-    """Generate model cards for trained modules."""
+    """Download or clean raw datasets and write processed parquet files."""
     configure_logging()
-    modules = ["cost", "member", "fraud"] if module == "all" else [module]
-    for m in modules:
+    from claimsight.data.load_and_clean import load_and_clean
+
+    targets = ["cost", "synpuf", "fraud"] if dataset == "all" else [dataset]
+    for d in targets:
+        typer.echo(f"Cleaning dataset: {d}...")
+        load_and_clean(d)
+    typer.echo("Data processing completed.")
+
+
+@app.command("info")
+def info_command() -> None:
+    """Display environment, configuration, and registered model details."""
+    from claimsight.config import get_settings
+    from claimsight.models.registry import load_model
+
+    cfg = get_settings()
+    typer.echo("ClaimSight Health Insurance Intelligence Platform")
+    typer.echo(f"Seed: {cfg.seed}")
+    typer.echo(f"Environment: {cfg.env}")
+    for m in ["cost", "member", "fraud"]:
         try:
-            card_path = generate_model_card(m)
-            typer.echo(f"Generated card for {m}: {card_path}")
-        except Exception as e:
-            logger.warning("Could not generate card for %s: %s", m, e)
+            _, meta = load_model(m)
+            typer.echo(
+                f"Model {m}: Version {meta.get('version')} (Trained: {meta.get('created_at')})"
+            )
+        except Exception:
+            typer.echo(f"Model {m}: Not trained")
 
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ from claimsight.models.registry import load_model
 logger = get_logger(__name__)
 
 
-def generate_model_card(module: str) -> Path:
+def generate_model_card(module: str, output_path: Path | None = None) -> Path:
     """Render and save a comprehensive markdown model card from evaluated metrics and metadata."""
     cfg = get_settings()
     model, metadata = load_model(module)
@@ -58,7 +58,11 @@ def generate_model_card(module: str) -> Path:
 
     rendered_card = template.render(**template_context)
 
-    out_path = cfg.paths.reports_dir / "model_cards" / f"{module}.md"
+    out_path = (
+        output_path
+        if output_path is not None
+        else (cfg.paths.reports_dir / "model_cards" / f"{module}.md")
+    )
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(rendered_card)
