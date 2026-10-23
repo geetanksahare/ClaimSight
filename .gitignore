@@ -52,8 +52,7 @@ data/interim/*
 data/processed/*
 !data/processed/.gitkeep
 
-# Models: ignore model weights/joblib, keep metadata and latest.json
-models/*/*/*.joblib
+# Models: test and mismatch directories ignored; versioned models included for deployment
 models/*_test*/
 models/*_mismatch*/
 

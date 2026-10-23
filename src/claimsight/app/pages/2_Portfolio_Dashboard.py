@@ -38,10 +38,15 @@ def load_portfolio_data() -> pd.DataFrame:
     if "charges" in df.columns and "prediction" not in df.columns:
         # Score the portfolio using the cost model
         features_df = df[["age", "sex", "bmi", "children", "smoker", "region"]]
-        scored = predict_cost(features_df)
-        df["predicted_cost"] = scored["prediction"].values
-        df["interval_lower"] = scored["lower"].values
-        df["interval_upper"] = scored["upper"].values
+        try:
+            scored = predict_cost(features_df)
+            df["predicted_cost"] = scored["prediction"].values
+            df["interval_lower"] = scored["lower"].values
+            df["interval_upper"] = scored["upper"].values
+        except Exception as e:
+            st.error(f"Cost model artifact not found or failed to load ({e}).")
+            st.code("claimsight train-cost", language="bash")
+            st.stop()
     return df
 
 
