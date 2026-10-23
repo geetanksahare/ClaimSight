@@ -1,5 +1,11 @@
 import json
+import sys
 from pathlib import Path
+
+# Ensure root src directory is in sys.path for Streamlit Cloud deployment
+_src_root = Path(__file__).resolve().parent.parent.parent
+if str(_src_root) not in sys.path:
+    sys.path.insert(0, str(_src_root))
 
 import streamlit as st
 
