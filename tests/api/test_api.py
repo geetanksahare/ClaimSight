@@ -215,3 +215,28 @@ def test_api_key_authentication(monkeypatch):
         # Request with correct key should be 200
         res_good_key = key_client.get("/v1/models", headers={"X-API-Key": "secret-test-key"})
         assert res_good_key.status_code == 200
+
+
+def test_missing_model_returns_503(client, monkeypatch):
+    """Verify endpoint returns HTTP 503 Service Unavailable when model artifacts are missing."""
+    from claimsight.api import main
+
+    def mock_missing_predict(inputs):
+        raise FileNotFoundError(
+            "No latest.json pointer found for 'cost'. Run 'claimsight train-cost' first."
+        )
+
+    monkeypatch.setattr(main, "predict_cost", mock_missing_predict)
+
+    payload = {
+        "age": 45,
+        "sex": "male",
+        "bmi": 28.0,
+        "children": 1,
+        "smoker": "no",
+        "region": "northwest",
+    }
+    response = client.post("/v1/cost/predict", json=payload)
+    assert response.status_code == 503
+    assert "Model service unavailable" in response.json()["detail"]
+    assert "claimsight train-cost" in response.json()["detail"]

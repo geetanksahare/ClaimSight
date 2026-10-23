@@ -101,7 +101,7 @@ with col_res:
         )
     )
     fig_gauge.update_layout(height=240, margin=dict(l=20, r=20, t=30, b=20))
-    st.plotly_chart(fig_gauge, use_container_width=True)
+    st.plotly_chart(fig_gauge, width="stretch")
 
 st.divider()
 
@@ -133,7 +133,7 @@ with exp_col:
             title="Local Feature Contribution (% Multiplier on Log-Scale Baseline)",
         )
         fig_shap.update_layout(yaxis={"categoryorder": "total ascending"}, height=300)
-        st.plotly_chart(fig_shap, use_container_width=True)
+        st.plotly_chart(fig_shap, width="stretch")
 
         for c in explanation["contributions"]:
             st.markdown(f"- {c['text']}")
@@ -164,7 +164,7 @@ with whatif_col:
         title=f"Sensitivity: Estimated Cost vs {sweep_feat.upper()}",
         labels={"feature_value": sweep_feat, "prediction": "Predicted ($)"},
     )
-    st.plotly_chart(fig_sweep, use_container_width=True)
+    st.plotly_chart(fig_sweep, width="stretch")
 
     with st.expander("Sequential Modification Counterfactual"):
         target_smoker = "yes" if inputs["smoker"] == "no" else "no"

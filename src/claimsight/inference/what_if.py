@@ -32,7 +32,7 @@ def what_if(base_inputs: dict[str, Any], changes: dict[str, Any]) -> dict[str, A
         steps.append(
             {
                 "feature": feat,
-                "new_value": new_val,
+                "new_value": str(new_val),
                 "cumulative_prediction": step_pred,
                 "marginal_delta": step_delta,
             }

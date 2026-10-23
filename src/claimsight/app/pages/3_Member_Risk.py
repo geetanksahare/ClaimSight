@@ -182,7 +182,7 @@ if reports_path.exists():
         labels={"x": "Risk Tier", "y": "Population Share (%)"},
         title="Distribution of Members Across Risk Tiers",
     )
-    st.plotly_chart(fig_dist, use_container_width=True)
+    st.plotly_chart(fig_dist, width="stretch")
 
     fig_calib = Path("reports/figures/member_calibration.png")
     if fig_calib.exists():

@@ -25,12 +25,14 @@ def load_portfolio_data() -> pd.DataFrame:
     if cost_path.exists():
         df = pd.read_parquet(cost_path)
     else:
-        # Fallback to demo sample
-        sample_path = cfg.paths.demo_dir / "member_sample.parquet"
-        if sample_path.exists():
-            df = pd.read_parquet(sample_path)
+        # Fallback to demo cost sample
+        demo_cost_path = cfg.paths.demo_dir / "insurance_clean.parquet"
+        if demo_cost_path.exists():
+            df = pd.read_parquet(demo_cost_path)
         else:
-            st.error("No portfolio data found. Run `claimsight load-and-clean`.")
+            st.error(
+                "No portfolio data found. Run `claimsight load-and-clean` or provide `data/demo/insurance_clean.parquet`."
+            )
             st.stop()
 
     if "charges" in df.columns and "prediction" not in df.columns:
@@ -203,7 +205,7 @@ with col_reg2:
 
 # Scored Data Download Table
 st.subheader("📋 Scored Portfolio Records")
-st.dataframe(filtered.head(50), use_container_width=True)
+st.dataframe(filtered.head(50), width="stretch")
 
 csv_data = filtered.to_csv(index=False).encode("utf-8")
 st.download_button(

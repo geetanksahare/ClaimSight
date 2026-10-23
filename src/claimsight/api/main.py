@@ -107,6 +107,19 @@ async def get_models():
     return {"models": models_meta}
 
 
+def _handle_api_error(module: str, exc: Exception) -> None:
+    """Map missing model errors to HTTP 503 Service Unavailable, other exceptions to HTTP 500."""
+    err_msg = str(exc)
+    if isinstance(exc, FileNotFoundError) or "Run 'claimsight train-" in err_msg:
+        logger.warning("Model service unavailable for %s: %s", module, err_msg)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Model service unavailable: {err_msg}",
+        )
+    logger.error("%s endpoint error: %s", module, err_msg)
+    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=err_msg)
+
+
 @app.post("/v1/cost/predict", tags=["Cost Prediction"], dependencies=[Depends(verify_api_key)])
 async def predict_individual_cost(payload: CostInput):
     """Predict annual healthcare charges with 90% split conformal prediction interval."""
@@ -114,8 +127,7 @@ async def predict_individual_cost(payload: CostInput):
         result = predict_cost(payload.model_dump())
         return result
     except Exception as e:
-        logger.error("Cost prediction failed: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+        _handle_api_error("cost", e)
 
 
 @app.post("/v1/cost/explain", tags=["Cost Prediction"], dependencies=[Depends(verify_api_key)])
@@ -126,8 +138,7 @@ async def explain_cost(payload: CostInput, top_k: int = 5):
         result = explain_prediction("cost", df_row, top_k=top_k)
         return result
     except Exception as e:
-        logger.error("Cost explainability failed: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+        _handle_api_error("cost", e)
 
 
 @app.post("/v1/cost/what-if", tags=["Cost Prediction"], dependencies=[Depends(verify_api_key)])
@@ -138,8 +149,7 @@ async def what_if_analysis(payload: WhatIfRequest):
         result = what_if(base_dict, payload.changes)
         return result
     except Exception as e:
-        logger.error("What-if simulation failed: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+        _handle_api_error("cost", e)
 
 
 @app.post("/v1/members/score", tags=["Member Risk"], dependencies=[Depends(verify_api_key)])
@@ -150,8 +160,7 @@ async def score_single_member(payload: MemberInput):
         scored_df = score_member_risk(df_row)
         return scored_df.iloc[0].to_dict()
     except Exception as e:
-        logger.error("Member risk scoring failed: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+        _handle_api_error("member", e)
 
 
 @app.post("/v1/members/score-batch", tags=["Member Risk"], dependencies=[Depends(verify_api_key)])
@@ -160,7 +169,9 @@ async def score_batch_members(payload: list[MemberInput]):
     max_rows = cfg.api.max_batch_rows
     if len(payload) > max_rows:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE
+            if hasattr(status, "HTTP_413_CONTENT_TOO_LARGE")
+            else 413,
             detail=f"Batch size of {len(payload)} exceeds maximum permitted size of {max_rows} rows.",
         )
     try:
@@ -168,8 +179,7 @@ async def score_batch_members(payload: list[MemberInput]):
         scored_df = score_member_risk(df)
         return scored_df.to_dict(orient="records")
     except Exception as e:
-        logger.error("Batch member risk scoring failed: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+        _handle_api_error("member", e)
 
 
 @app.post(
@@ -182,5 +192,4 @@ async def flag_provider_anomalies(payload: FlagRequest):
         ranked_df = flag_anomalies(df, top_n=payload.top_n)
         return ranked_df.to_dict(orient="records")
     except Exception as e:
-        logger.error("Provider anomaly flagging failed: %s", e)
-        raise HTTPException(status_code=500, detail=str(e))
+        _handle_api_error("fraud", e)

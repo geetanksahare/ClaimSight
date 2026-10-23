@@ -90,9 +90,17 @@ with tab_member:
         with m2:
             st.metric("ROC-AUC", f"{member_metrics.get('roc_auc', 0.0):.4f}")
         with m3:
-            st.metric("Tweedie Dev / R²", f"{member_metrics.get('tweedie_deviance', 0.0):.2f}")
+            r2_val = member_metrics.get(
+                "test_r2", member_metrics.get("regression", {}).get("r2", 0.0)
+            )
+            rmse_val = member_metrics.get(
+                "test_rmse", member_metrics.get("regression", {}).get("rmse", 0.0)
+            )
+            st.metric("Test R²", f"{r2_val:.4f}", f"RMSE: ${rmse_val:,.2f}")
         with m4:
-            brier = member_metrics.get("brier", 0.0)
+            brier = member_metrics.get("classification", {}).get(
+                "brier", member_metrics.get("brier", 0.0)
+            )
             st.metric("Brier Score", f"{brier:.4f}")
 
         st.markdown("### Precision-Recall & Calibration Profiles")

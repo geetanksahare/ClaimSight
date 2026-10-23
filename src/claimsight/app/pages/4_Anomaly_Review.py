@@ -105,7 +105,7 @@ with col_table:
             }
         ),
         height=400,
-        use_container_width=True,
+        width="stretch",
     )
 
     csv_data = filtered_df.to_csv(index=False).encode("utf-8")
@@ -153,7 +153,7 @@ with col_detail:
                 ]
                 if c in claims_table.columns
             ]
-            st.dataframe(claims_table[show_claim_cols].head(10), use_container_width=True)
+            st.dataframe(claims_table[show_claim_cols].head(10), width="stretch")
         else:
             st.caption("Detailed claims table not loaded.")
     else:

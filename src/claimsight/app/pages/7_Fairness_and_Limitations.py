@@ -79,7 +79,7 @@ with tab_cost:
                         "Low Sample Alert": "⚠️ Yes (N<30)" if g_data.get("low_n", False) else "No",
                     }
                 )
-            st.dataframe(pd.DataFrame(rows), use_container_width=True)
+            st.dataframe(pd.DataFrame(rows), width="stretch")
 
 
 # 2. Member Risk Fairness
@@ -119,7 +119,7 @@ with tab_member:
                         "Low Sample Alert": "⚠️ Yes (N<30)" if g_data.get("low_n", False) else "No",
                     }
                 )
-            st.dataframe(pd.DataFrame(rows), use_container_width=True)
+            st.dataframe(pd.DataFrame(rows), width="stretch")
 
 
 # 3. Provider Anomaly Fairness
@@ -155,7 +155,7 @@ with tab_fraud:
                         "FPR": f"{g_data.get('fpr', 0.0) * 100:.1f}%",
                     }
                 )
-            st.dataframe(pd.DataFrame(rows), use_container_width=True)
+            st.dataframe(pd.DataFrame(rows), width="stretch")
 
 
 # 4. Model Cards & Governance Documentation

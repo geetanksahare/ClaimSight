@@ -20,7 +20,10 @@ logger = get_logger(__name__)
 
 def _clean_cost(path: Path) -> pd.DataFrame:
     if not path.exists():
-        raise FileNotFoundError(f"Cost dataset file not found: {path}")
+        raise FileNotFoundError(
+            f"Cost dataset file not found: {path}. "
+            "Run 'python scripts/download_data.py' or place insurance.csv in data/raw/cost/."
+        )
 
     df = pd.read_csv(path)
     logger.info("Loaded raw cost data from %s: %d rows, %d columns", path, len(df), len(df.columns))
@@ -66,7 +69,10 @@ def _clean_synpuf(raw_dir: Path) -> dict[str, pd.DataFrame]:
         bene_files = sorted(raw_dir.glob("*beneficiary*.csv"))
 
     if not bene_files:
-        raise FileNotFoundError(f"No SynPUF beneficiary files found in {raw_dir}")
+        raise FileNotFoundError(
+            f"No SynPUF beneficiary files found in {raw_dir}. "
+            "Run 'python scripts/generate_synthetic_synpuf.py' or place CMS SynPUF Sample 1 CSVs in data/raw/synpuf/."
+        )
 
     bene_dfs = []
     for bf in bene_files:
@@ -272,7 +278,10 @@ def _clean_fraud(raw_dir: Path) -> dict[str, pd.DataFrame]:
     labels_files = list(raw_dir.glob("Train-*.csv")) or list(raw_dir.glob("*fraud*.csv"))
 
     if not (bene_files and inpatient_files and outpatient_files and labels_files):
-        raise FileNotFoundError(f"One or more required fraud files missing in {raw_dir}")
+        raise FileNotFoundError(
+            f"One or more required fraud files missing in {raw_dir}. "
+            "Run 'python scripts/generate_synthetic_fraud.py' or download Kaggle fraud CSVs into data/raw/fraud/."
+        )
 
     bene = pd.read_csv(bene_files[0])
     ip = pd.read_csv(inpatient_files[0])

@@ -124,12 +124,27 @@ uploaded_file = st.file_uploader("Upload CSV Data File for Scoring", type=["csv"
 if uploaded_file is not None:
     try:
         input_df = pd.read_csv(uploaded_file)
-        st.success(
-            f"Uploaded file loaded successfully: {len(input_df):,} rows, {len(input_df.columns)} columns."
-        )
     except Exception as e:
         st.error(f"Error parsing CSV file: {e}")
         st.stop()
+
+    if input_df.empty:
+        st.error(
+            "Uploaded CSV file is empty. Please provide a CSV file with at least one data row."
+        )
+        st.stop()
+
+    cfg = get_settings()
+    max_batch = cfg.api.max_batch_rows
+    if len(input_df) > max_batch:
+        st.error(
+            f"Uploaded file contains {len(input_df):,} rows, which exceeds the maximum batch limit of {max_batch:,} rows."
+        )
+        st.stop()
+
+    st.success(
+        f"Uploaded file loaded successfully: {len(input_df):,} rows, {len(input_df.columns)} columns."
+    )
 
     errors = []
 
@@ -195,12 +210,19 @@ if uploaded_file is not None:
                 errors.append(
                     {"row": "All", "column": col, "issue": f"Missing required column: '{col}'"}
                 )
+    elif module_choice == "Provider Anomaly Review":
+        required_cols = ["Provider", "n_claims"]
+        for col in required_cols:
+            if col not in input_df.columns:
+                errors.append(
+                    {"row": "All", "column": col, "issue": f"Missing required column: '{col}'"}
+                )
 
     # Error handling display
     if errors:
         st.error(f"⚠️ Validation checks identified {len(errors)} error(s) in uploaded data:")
         err_df = pd.DataFrame(errors)
-        st.dataframe(err_df, use_container_width=True)
+        st.dataframe(err_df, width="stretch")
         st.warning("Please correct these errors in your CSV file before proceeding.")
     else:
         st.success("✅ File passed schema validation! Ready for inference.")
@@ -242,7 +264,7 @@ if uploaded_file is not None:
                             p90 = scored_df["prediction"].quantile(0.9)
                             st.metric("90th Percentile Cost", f"${p90:,.2f}")
 
-                    st.dataframe(scored_df, use_container_width=True)
+                    st.dataframe(scored_df, width="stretch")
 
                     out_csv = scored_df.to_csv(index=False).encode("utf-8")
                     st.download_button(

@@ -52,8 +52,9 @@ def save_model(module: str, model: Any, metadata: dict[str, Any]) -> Path:
 
     # Update latest pointer (JSON instead of symlinks for Windows compatibility)
     latest_path = module_dir / "latest.json"
+    relative_path = f"models/{module}/{version}"
     with open(latest_path, "w", encoding="utf-8") as f:
-        json.dump({"latest_version": version, "path": str(version_dir)}, f, indent=2)
+        json.dump({"latest_version": version, "path": relative_path}, f, indent=2)
 
     logger.info("Saved %s model version %s to %s", module, version, version_dir)
     return version_dir
