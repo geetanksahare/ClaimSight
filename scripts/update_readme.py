@@ -52,13 +52,18 @@ def generate_metrics_markdown() -> str:
     )
 
     # Member Row
+    m_cls = member_data.get("classification", {})
+    m_pr_val = member_data.get("pr_auc") or m_cls.get("pr_auc", 0.0)
+    m_base = m_cls.get("base_rate") or member_data.get("base_rate", 0.1)
     m_pr = (
-        f"{member_data.get('pr_auc', 0.0):.4f} (Base: {member_data.get('base_rate', 0.1) * 100:.1f}%)"
+        f"{m_pr_val:.4f} (Base: {m_base * 100:.1f}%)"
         if member_data
         else "N/A"
     )
-    m_roc = f"ROC-AUC = {member_data.get('roc_auc', 0.0):.4f}" if member_data else "N/A"
-    m_brier = f"Brier = {member_data.get('brier', 0.0):.4f}" if member_data else "N/A"
+    m_roc_val = member_data.get("roc_auc") or m_cls.get("roc_auc", 0.0)
+    m_roc = f"ROC-AUC = {m_roc_val:.4f}" if member_data else "N/A"
+    m_brier_val = m_cls.get("brier", member_data.get("brier", 0.0))
+    m_brier = f"Brier = {m_brier_val:.4f}" if member_data else "N/A"
     m_best = member_data.get("best_model", "lightgbm")
     md.append(
         f"| **2. Member Risk** | Compound Tweedie + Isotonic | `{m_best}` | PR-AUC = {m_pr} | {m_roc} | {m_brier} |"

@@ -7,7 +7,7 @@ _src_root = Path(__file__).resolve().parent.parent.parent
 if str(_src_root) not in sys.path:
     sys.path.insert(0, str(_src_root))
 
-import streamlit as st
+import streamlit as st  # noqa: E402
 
 st.set_page_config(
     page_title="ClaimSight | Health Insurance Cost & Claims Intelligence",
