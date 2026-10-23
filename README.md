@@ -5,7 +5,6 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg)](https://fastapi.tiangolo.com/)
 [![Tests](https://img.shields.io/badge/pytest-71%20passed%20%7C%2095%25%20cov-brightgreen.svg)](https://docs.pytest.org/)
 [![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > 🚀 **Live Interactive Demo:** Experience the ClaimSight Clinical & Actuarial Observatory directly in your browser without local setup:  
 > 👉 **[https://claimsight.streamlit.app/](https://claimsight.streamlit.app/)**
@@ -340,7 +339,3 @@ Looking for deep architectural breakdowns and interview reference materials? Che
 4. **Human-in-the-Loop Clinical Support:** Predictions are designed to support actuaries and clinical teams—not to automate adverse claims denials or discriminatory exclusions.
 
 ---
-
-## License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
